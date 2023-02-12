@@ -1,8 +1,20 @@
 # Discord.js command handler
 A boilerplate for a command handeler for a discord bot you could use to create discord bots with ease.
 
+## Install
+
+First:
+```bash
+yarn
+```
+
+Then:
+```bash
+yarn dev
+```
+
 ## Config
-Create a config.json like this :
+Create a config.json like this:
 
 ```json
 {
@@ -10,4 +22,4 @@ Create a config.json like this :
 }
 ```
 ## Command creation
-You can create commands by creating files that export a object show in the examples in the commands folder.
+You can create commands by creating files that export an object like shown in the examples in the commands folder.
