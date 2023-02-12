@@ -14,7 +14,7 @@ yarn dev
 ```
 
 ## Config
-Create a config.json like this :
+Create a config.json like this:
 
 ```json
 {
