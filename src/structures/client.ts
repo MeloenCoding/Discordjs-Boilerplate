@@ -1,9 +1,9 @@
 import { ApplicationCommandDataResolvable, Client, ClientEvents, Collection, GatewayIntentBits } from "discord.js";
-import { CommandType, CustomCommand } from "../typings/command";
+import { CommandType, CustomCommandType } from "../typings/command";
 
 import { RegisterCommandsOptions } from "../typings/client";
 import { Event } from "./event";
-import { token } from "../../config.json";
+import { token, prefix } from "../../config.json";
 import glob from "glob";
 import { promisify } from "util";
 
@@ -11,8 +11,7 @@ const globPromise = promisify(glob);
 
 export class ExtendedClient extends Client {
     commands: Collection<string, CommandType> = new Collection();
-    customCommands: CustomCommand[] = [];
-    defaultPrefix = ".srpg";
+    customCommands: CustomCommandType[] = [];
 
     constructor() {
         super({ intents: [
@@ -31,19 +30,17 @@ export class ExtendedClient extends Client {
         this.registerCustomCommands();
         this.login(token).then(() => {
             console.log("Logged in");
-            console.log("Custom Commands: ", this.customCommands);
         });
         this.customCommandHandler();
     }
     
     async registerCustomCommands() {
         const commandFiles = await globPromise(`${__dirname}/../commands/*/*{.ts,.js}`);
+        console.log("Registering custom commands");
         
         commandFiles.forEach(async filePath => {
-            const command: CustomCommand = await this.importFile(filePath);
-            if (!command.name) return;
-            if (command.type != "CustomCommand") return;
-            
+            const command: CustomCommandType = await this.importFile(filePath);
+            if (!command.name || command.commandType === "Command") return;
             this.customCommands.push(command);
         });
         
@@ -51,7 +48,7 @@ export class ExtendedClient extends Client {
 
     async registerCommands({ commands, guildId }: RegisterCommandsOptions) {
         if (guildId) {
-            this.guilds.cache.get(guildId)?.commands.cache.clear();
+            await this.guilds.cache.get(guildId)?.commands.cache.clear();
             this.guilds.cache.get(guildId)?.commands.set(commands);
             console.log(`Registering commands to ${guildId}`);
         } else {
@@ -65,8 +62,7 @@ export class ExtendedClient extends Client {
         const commandFiles = await globPromise(`${__dirname}/../commands/*/*{.ts,.js}`);
         commandFiles.forEach(async filePath => {
             const command: CommandType = await this.importFile(filePath);
-            if (!command.name) return;
-            if (command.type) return;
+            if (!command.name || command.commandType === "CustomCommand") return;
             
             this.commands.set(command.name, command);
             mainCommands.push(command);
@@ -87,7 +83,7 @@ export class ExtendedClient extends Client {
 
     customCommandHandler() {
         this.on("messageCreate", message => {
-            if (message.content.startsWith(this.defaultPrefix) && message.content.split(" ")[0] == this.defaultPrefix) {
+            if (message.content.startsWith(prefix) && message.content.split(" ")[0] == prefix) {
                 const args = message.content.split(" ");
                 this.customCommands.forEach(command => {
                     if (args[1] == command.name) {

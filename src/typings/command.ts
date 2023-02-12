@@ -14,16 +14,17 @@ export interface ExtendedInteraction extends CommandInteraction {
 }
 
 export type CommandType = {
-    run: RunFunction;
+    run: RunFunction,
+    commandType?: "CustomCommand" | "Command",
 } & ChatInputApplicationCommandData
 
 
 type CustomRunFunction = (message: Message, args: (string | undefined)[]) => void;
 
-export type CustomCommand = {
+export type CustomCommandType = {
     run: CustomRunFunction,
     args: string,
     description: string,
-    type: "CustomCommand" | "Command",
+    commandType: "CustomCommand" | "Command",
     name: string
 }
