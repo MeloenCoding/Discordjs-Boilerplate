@@ -44,7 +44,7 @@ export default new Command({
             descString += item.description + "\n";
         });
         customCommandList.forEach((item) => {
-            commandString += prefix + item.name + "\n";
+            commandString += prefix + " " + item.name + "\n";
             argsString += item.args + "\n";
             descString += item.description + "\n";
         });
