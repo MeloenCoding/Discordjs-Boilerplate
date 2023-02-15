@@ -16,6 +16,7 @@
   "main": "dist/index.js",
   "dependencies": {
     "@types/glob": "^8.0.1",
-    "discord.js": "^14.7.1"
+    "discord.js": "^14.7.1",
+    "glob": "8.1.0"
   }
 }

@@ -35,7 +35,7 @@ export class ExtendedClient extends Client {
     }
     
     async registerCustomCommands() {
-        const commandFiles = await globPromise(`${__dirname}/../commands/*/*{.ts,.js}`);
+        const commandFiles = await globPromise(`${__dirname}\\..\\commands\\*\\*{.ts,.js}`.replace(/\\/gm, "/"));
         console.log("Registering custom commands");
         
         commandFiles.forEach(async filePath => {
@@ -59,7 +59,7 @@ export class ExtendedClient extends Client {
 
     async registerModules() {
         const mainCommands: ApplicationCommandDataResolvable[] = [];
-        const commandFiles = await globPromise(`${__dirname}/../commands/*/*{.ts,.js}`);
+        const commandFiles = await globPromise(`${__dirname}\\..\\commands\\*\\*{.ts,.js}`.replace(/\\/gm, "/"));
         commandFiles.forEach(async filePath => {
             const command: CommandType = await this.importFile(filePath);
             if (!command.name || command.commandType === "CustomCommand") return;
@@ -68,7 +68,7 @@ export class ExtendedClient extends Client {
             mainCommands.push(command);
         });
 
-        const eventFiles = await globPromise(`${__dirname}/../events/*{.ts,.js}`);
+        const eventFiles = await globPromise(`${__dirname}\\..\\events\\*{.ts,.js}`.replace(/\\/gm, "/"));
         eventFiles.forEach(async filePath => {
             const event: Event<keyof ClientEvents> = await this.importFile(filePath);
             this.on(event.event, event.run);
@@ -95,3 +95,4 @@ export class ExtendedClient extends Client {
     }
 }
 
+export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
