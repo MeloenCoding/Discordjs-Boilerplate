@@ -1,11 +1,11 @@
 import { EmbedBuilder } from "discord.js";
-import { Command, CreateStringSlashCommand } from "../../structures/command";
+import { Command, CreateStringSlashOption } from "../../structures/command";
 import glob from "glob";
 import { promisify } from "util";
 import { CommandType, CustomCommandType } from "../../typings/command";
 import { prefix } from "../../../config.json";
 
-const pageOption = CreateStringSlashCommand({
+const pageOption = CreateStringSlashOption({
     name: "page-num",
     description: "Page number",
     required: false

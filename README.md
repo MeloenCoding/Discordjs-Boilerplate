@@ -18,7 +18,8 @@ Create a config.json like this:
 
 ```json
 {
-    "token": "{your discord bot token here}"
+    "token": "{your discord bot token here}",
+    "prefix": ".srpg"
 }
 ```
 ## Command creation
